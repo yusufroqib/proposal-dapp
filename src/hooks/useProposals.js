@@ -12,7 +12,6 @@ const useProposals = () => {
 	const [proposals, setProposals] = useState([]);
 	const readOnlyProposalContract = useContract();
 	const { readOnlyProvider } = useRunners();
-
 	const fetchProposals = useCallback(async () => {
         console.log("Fetching..........")
 		if (!readOnlyProposalContract) return;
