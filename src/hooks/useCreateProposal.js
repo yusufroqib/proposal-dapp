@@ -17,7 +17,7 @@ const useCreateProposal = () => {
                 !recipient ||
                 !amount ||
                 !duration ||
-                !minVote
+                !minVote 
             ) {
                 toast.error("Missing field(s)");
                 return;
