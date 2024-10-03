@@ -6,8 +6,6 @@ import ABI from "../ABI/proposal.json";
 const useContract = (withSigner = false) => {
     const { readOnlyProvider, signer } = useRunners();
 
-    // console.log(readOnlyProvider)
-
     return useMemo(() => {
         if (withSigner) {
             if (!signer) return null;

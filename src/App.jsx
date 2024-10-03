@@ -2,18 +2,33 @@ import { Box } from "@radix-ui/themes";
 import Layout from "./components/Layout";
 import CreateProposalModal from "./components/CreateProposalModal";
 import Proposals from "./components/Proposals";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 
 import useProposals from "./hooks/useProposals";
+import useContract from "./hooks/useContract";
 
 function App() {
 	const { proposals, fetchProposals } = useProposals();
-	
-	// console.log("first");
+
+	const readOnlyProposalContract = useContract();
+
 
 	useEffect(() => {
-		fetchProposals();
-	}, [fetchProposals]);
+
+        fetchProposals();
+
+		readOnlyProposalContract.on("ProposalCreated", fetchProposals);
+		readOnlyProposalContract.on("Voted", fetchProposals);
+		return () => {
+			readOnlyProposalContract.removeListener(
+				"ProposalCreated",
+				fetchProposals
+			);
+			readOnlyProposalContract.removeListener("Voted", fetchProposals);
+		};
+	}, [readOnlyProposalContract, fetchProposals]);
+
+
 
 	return (
 		<Layout>

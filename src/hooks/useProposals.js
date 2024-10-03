@@ -1,6 +1,6 @@
 import useRunners from "./useRunners";
 import useContract from "./useContract";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Contract } from "ethers";
 import { Interface } from "ethers";
 import ABI from "../ABI/proposal.json";
@@ -12,22 +12,9 @@ const useProposals = () => {
 	const [proposals, setProposals] = useState([]);
 	const readOnlyProposalContract = useContract();
 	const { readOnlyProvider } = useRunners();
-	// console.log(readOnlyProposalContract);
-
-	useEffect(() => {
-		readOnlyProposalContract.on("ProposalCreated", fetchProposals);
-		readOnlyProposalContract.on("Voted", fetchProposals);
-		return () => {
-			readOnlyProposalContract.removeListener(
-				"ProposalCreated",
-				fetchProposals
-			);
-			readOnlyProposalContract.removeListener("Voted", fetchProposals);
-		};
-		// fetchProposals();
-	}, []);
 
 	const fetchProposals = useCallback(async () => {
+        console.log("Fetching..........")
 		if (!readOnlyProposalContract) return;
 		console.log("here i am");
 		const multicallContract = new Contract(
