@@ -1,28 +1,43 @@
 import { Box } from "@radix-ui/themes";
 import Layout from "./components/Layout";
 import CreateProposalModal from "./components/CreateProposalModal";
-import {
-    useAppKitAccount,
-    useAppKitProvider,
-    useWalletInfo,
-} from "@reown/appkit/react";
+import Proposals from "./components/Proposals";
+import { useEffect } from "react";
+
+import useProposals from "./hooks/useProposals";
+import useContract from "./hooks/useContract";
 
 function App() {
-    const { walletProvider } = useAppKitProvider("eip155");
-    const { walletInfo } = useWalletInfo();
-    const { address, status, isConnected } = useAppKitAccount();
-    console.log("walletInfo: ", walletInfo);
-    console.log("walletInfo: ", address, status, isConnected);
+	const { proposals, fetchProposals } = useProposals();
 
-    console.log("walletProvider: ", walletProvider, useAppKitProvider);
+	const readOnlyProposalContract = useContract();
 
-    return (
-        <Layout>
-            <Box className="flex justify-end p-4">
-                <CreateProposalModal />
-            </Box>
-        </Layout>
-    );
+
+	useEffect(() => {
+
+        fetchProposals();
+
+		readOnlyProposalContract.on("ProposalCreated", fetchProposals);
+		readOnlyProposalContract.on("Voted", fetchProposals);
+		return () => {
+			readOnlyProposalContract.removeListener(
+				"ProposalCreated",
+				fetchProposals
+			);
+			readOnlyProposalContract.removeListener("Voted", fetchProposals);
+		};
+	}, [readOnlyProposalContract, fetchProposals]);
+
+
+
+	return (
+		<Layout>
+			<Box className="flex justify-end p-4">
+				<CreateProposalModal />
+			</Box>
+			<Proposals proposals={proposals} />
+		</Layout>
+	);
 }
 
 export default App;
