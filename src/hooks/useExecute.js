@@ -6,7 +6,7 @@ import { useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../connection";
 // import { parseEther } from "ethers";
 
-const useVote = () => {
+const useExecute = () => {
 	const contract = useContract(true);
 	const { address } = useAppKitAccount();
 	const { chainId } = useAppKitNetwork();
@@ -31,8 +31,8 @@ const useVote = () => {
 			}
 
 			try {
-				const estimatedGas = await contract.vote.estimateGas(proposalId);
-				const tx = await contract.vote(
+				const estimatedGas = await contract.executeProposal.estimateGas(proposalId);
+				const tx = await contract.executeProposal(
 					proposalId,
 					{
 						gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
@@ -41,18 +41,18 @@ const useVote = () => {
 				const reciept = await tx.wait();
 
 				if (reciept.status === 1) {
-					toast.success("Voted successfully");
+					toast.success("Executed successfully");
 					return;
 				}
 				toast.error("Voting failed");
 				return;
 			} catch (error) {
-				console.error("error while voting: ", error);
-				toast.error("Voting errored:", error?.reason);
+				console.error("error while voting: ", error.reason);
+				toast.error( error?.reason);
 			}
 		},
 		[address, chainId, contract]
 	);
 };
 
-export default useVote;
+export default useExecute;
