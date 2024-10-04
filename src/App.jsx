@@ -19,17 +19,19 @@ function App() {
 
 		readOnlyProposalContract.on("ProposalCreated", fetchProposals);
 		readOnlyProposalContract.on("Voted", fetchProposals);
+		readOnlyProposalContract.on("ProposalExecuted", fetchProposals);
 		return () => {
 			readOnlyProposalContract.removeListener(
 				"ProposalCreated",
 				fetchProposals
 			);
 			readOnlyProposalContract.removeListener("Voted", fetchProposals);
+			readOnlyProposalContract.removeListener("ProposalExecuted", fetchProposals);
 		};
 	}, [readOnlyProposalContract, fetchProposals]);
 
 
-
+ 
 	return (
 		<Layout>
 			<Box className="flex justify-end p-4">
