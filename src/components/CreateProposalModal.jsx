@@ -1,10 +1,13 @@
 import { XCircleIcon } from "@heroicons/react/16/solid";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
-import useCreateProposal from "../hooks/useCreateProposal";
+import {  useState } from "react";
+import useProposalAction from "../hooks/useProposalActions";
+// import { NewStateContext } from "../context/newStateContext";
 
 const CreateProposalModal = () => {
-	const { handleCreateProposal, openModal, setOpenModal } = useCreateProposal();
+	// const { count, setCount } = useContext(NewStateContext);
+
+	const { createProposal } = useProposalAction();
 	const [state, setState] = useState({
 		description: "",
 		recipient: "",
@@ -13,13 +16,20 @@ const CreateProposalModal = () => {
 		minVote: 2,
 	});
 
+    // console.log(count)
+
+
+	// const handleClick = () => {
+	// 	setCount((prev) => prev+1);
+	// };
+
 	const handleInputChange = (name, e) => {
 		setState((preState) => ({ ...preState, [name]: e.target.value }));
 	};
 
 	const { amount, duration, description, minVote, recipient } = state;
 	return (
-		<Dialog.Root open={openModal} onOpenChange={setOpenModal}>
+		<Dialog.Root>
 			<Dialog.Trigger asChild>
 				<button className="bg-blue-500 p-4 text-white shadow-md rounded-md">
 					Create Proposal
@@ -30,6 +40,7 @@ const CreateProposalModal = () => {
 				<Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
 					<Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium mb-6">
 						Create Proposal
+						{/* <button onClick={handleClick}> increment</button> */}
 					</Dialog.Title>
 					<fieldset className="mb-[15px] flex items-center gap-5">
 						<label
@@ -110,7 +121,7 @@ const CreateProposalModal = () => {
 						<button
 							className="block w-full bg-blue-500 p-4 text-white items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none"
 							onClick={() =>
-								handleCreateProposal(
+								createProposal(
 									description,
 									recipient,
 									amount,
