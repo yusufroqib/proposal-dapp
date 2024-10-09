@@ -8,13 +8,15 @@ const useContract = (withSigner = false) => {
 
     return useMemo(() => {
         if (withSigner) {
+            console.log("Returning...")
             if (!signer) return null;
             return new Contract(
                 import.meta.env.VITE_CONTRACT_ADDRESS,
-                ABI,
+                ABI, 
                 signer
             );
         }
+
         return new Contract(
             import.meta.env.VITE_CONTRACT_ADDRESS,
             ABI,

@@ -16,7 +16,7 @@ export const liskSepoliaNetwork = {
 const projectId = import.meta.env.VITE_APPKIT_PROJECT_ID;
 
 // 2. Set the networks
-const networks = [liskSepoliaNetwork, sepolia];
+// const networks = [liskSepoliaNetwork, sepolia];
 
 // 3. Create a metadata object - optional
 const metadata = {
@@ -29,7 +29,7 @@ const metadata = {
 // 4. Create a AppKit instance
 export const appkit = createAppKit({
     adapters: [new EthersAdapter()],
-    networks,
+    networks:  [liskSepoliaNetwork, sepolia],
     metadata,
     projectId,
     allowUnsupportedChain: false,
